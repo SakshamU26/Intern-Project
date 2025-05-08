@@ -43,7 +43,7 @@ public class RecordData {
 
     @JsonProperty("version_selected")
     @Column(name = "version_selected")
-    private int versionSelected = -1;
+    private Integer versionSelected;
 
     @OneToMany(mappedBy = "recordDataId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

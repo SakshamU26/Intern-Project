@@ -95,12 +95,11 @@ public class SelectionScheduler {
 
             int selected = -1;
             for(int i=0; i<3; i++) {
-                if(suggestions.get(i).equalsIgnoreCase(bestSuggestion.trim())) {
+                if(suggestions.get(i).trim().equalsIgnoreCase(bestSuggestion.trim())) {
                     selected = i+1;
                     break;
                 }
             }
-
             RecordData tableData = recordDataRepository.getReferenceById(id);
             tableData.setFriendlyColumnName(bestSuggestion);
             tableData.setVersionSelected(selected);
