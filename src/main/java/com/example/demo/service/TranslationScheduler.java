@@ -55,7 +55,7 @@ public class TranslationScheduler {
                     .append("- Example Data: ").append(curr.getData()).append("\n\n");
 
             if (!context.toString().trim().isEmpty()) {
-                dynamicPromptBuilder.append("Some data for Column ")
+                dynamicPromptBuilder.append("Some sample data for this column ")
                         .append(curr.getColumnName())
                         .append(" is:-\n")
                         .append(context).append("\n");

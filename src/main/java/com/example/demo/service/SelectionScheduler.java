@@ -77,7 +77,9 @@ public class SelectionScheduler {
                     .append("- Example Data: ").append(recordData.getData()).append("\n\n");
 
             if (!context.toString().trim().isEmpty()) {
-                promptBuilder.append("Some sample columns in the same table with its data are:-\n")
+                promptBuilder.append("Some sample data for this column ")
+                        .append(recordData.getColumnName())
+                        .append(" is:-\n")
                         .append(context).append("\n");
             }
 
@@ -93,7 +95,7 @@ public class SelectionScheduler {
             OllamaRequest request = new OllamaRequest("gemma3:4b", prompt, false);
             String bestSuggestion = ollamaService.selectBestSuggestionWithOllama(request).getResponse();
 
-            int selected = -1;
+            Integer selected = null;
             for(int i=0; i<3; i++) {
                 if(suggestions.get(i).trim().equalsIgnoreCase(bestSuggestion.trim())) {
                     selected = i+1;
