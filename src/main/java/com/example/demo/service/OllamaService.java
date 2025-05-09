@@ -86,7 +86,6 @@ public class OllamaService {
     public OllamaResponse selectBestSuggestionWithOllama(OllamaRequest request) {
         try {
             HttpEntity<OllamaRequest> entity = new HttpEntity<>(request);
-
             ResponseEntity<String> response = restTemplate.exchange(
                     apiUrl,
                     HttpMethod.POST,

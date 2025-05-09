@@ -63,7 +63,7 @@ public class RecordDataService {
             updated.setColumnName(tableData.getColumnName());
             updated.setFriendlyColumnName(null);
             updated.setVersionCount(0);
-            updated.setVersionSelected(-1);
+            updated.setVersionSelected(null);
 
             recordDataRepository.save(updated);
             logger.info("Update successful for column '{}' in table '{}'", columnName, tableName);
@@ -163,10 +163,20 @@ public class RecordDataService {
         Optional<RecordData> curr = recordDataRepository.findByTableNameAndColumnName(tableName,columnName);
         if(curr.isPresent()) {
             RecordData recordData = curr.get();
-            String cname = recordData.getColumnName();
-            OllamaRequest request = new OllamaRequest("llama3.2",cname,false);
 
-            OllamaResponse response = ollamaService.communicateWithOllama(request);
+            String prompt = "You are an expert in understanding Dutch Column names provided a specific context\n" +
+                    "I want you to convert the below column name into an english Column name, taking help" +
+                    "from the extra information provided to you:-\n" +
+                    "Column Name: " + recordData.getColumnName() +"\n" +
+                    "Table Name: " + recordData.getTableName() +"\n" +
+                    "Description: " + recordData.getDescription() + "\n" +
+                    "Data: " + recordData.getData() + "\n" +
+                    "You need to give a 1 word answer containing the appropriate English Column Name";
+
+            logger.info("The prompt generated for column {} is as follows:-\n", prompt);
+            OllamaRequest request = new OllamaRequest("llama3.2",prompt,false);
+
+            OllamaResponse response = ollamaService.selectBestSuggestionWithOllama(request);
             return response.getResponse();
         }
         else return "Column Name not present";
