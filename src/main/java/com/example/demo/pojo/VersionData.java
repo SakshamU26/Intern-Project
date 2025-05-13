@@ -29,8 +29,8 @@ public class VersionData {
     @JsonProperty("version")
     private int version;
 
-    @JsonProperty("suggestions")
-    private String suggestions;
+    @JsonProperty("friendly_column_name_version")
+    private String friendlyColumnNameVersion;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

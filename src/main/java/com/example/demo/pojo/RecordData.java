@@ -28,22 +28,12 @@ public class RecordData {
     @JsonProperty("column_name")
     private String columnName;
 
-    @JsonProperty("data")
-    private String data;
 
     @JsonProperty("friendly_column_name")
     private String friendlyColumnName;
 
     @Column(name = "version_count")
     private int versionCount;
-
-    @JsonProperty("description")
-    @Column(name = "description")
-    private String description;
-
-    @JsonProperty("version_selected")
-    @Column(name = "version_selected")
-    private Integer versionSelected;
 
     @OneToMany(mappedBy = "recordDataId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
