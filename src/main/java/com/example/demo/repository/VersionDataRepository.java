@@ -10,6 +10,7 @@ import java.util.List;
 public interface VersionDataRepository extends JpaRepository<VersionData,Long> {
 
     List<VersionData> findByRecordDataId(RecordData recordData);
+    void deleteByRecordDataId(RecordData recordData);
 
     @Query("SELECT v FROM VersionData v " +
             "WHERE v.recordDataId.friendlyColumnName IS NULL " +

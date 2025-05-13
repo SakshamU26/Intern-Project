@@ -59,6 +59,9 @@ public class RequestDataService {
         Optional<RecordData> curr = recordDataRepository.findByTableNameAndColumnName(tableName,columnName);
 
         curr.ifPresent(updated -> {
+
+            versionDataRepository.deleteByRecordDataId(curr.get());
+
             updated.setColumnName(tableData.getColumnName());
             updated.setFriendlyColumnName(null);
             updated.setVersionCount(0);
