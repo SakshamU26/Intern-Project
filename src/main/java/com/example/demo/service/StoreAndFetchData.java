@@ -80,7 +80,6 @@ public class StoreAndFetchData {
                     .computeIfAbsent(sample.getColumnName(), k -> new ArrayList<>())
                     .add(sample.getExampleData());
         }
-
         return previousColumnValues;
     }
 

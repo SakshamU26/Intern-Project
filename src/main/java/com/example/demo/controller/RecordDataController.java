@@ -54,10 +54,6 @@ public class RecordDataController {
         requestDataService.addData(tableData);
     }
 
-//    @PutMapping("/{id}")
-//    public String updateData(@PathVariable Long id, @RequestBody RecordData tableData) {
-//        return recordDataService.updateData(id,tableData);
-//    }
 
     @PutMapping("/search")
     public ResponseEntity<String> updateDataByTableNameAndColumnName(@RequestParam String table_name,
@@ -77,10 +73,6 @@ public class RecordDataController {
         }
     }
 
-//    @DeleteMapping("/{id}")
-//    public String deleteData(@PathVariable Long id) {
-//        return recordDataService.deleteData(id);
-//    }
 
     @DeleteMapping("/search")
     public ResponseEntity<String> deleteDataByTableNameAndColumnName(@RequestParam String table_name,
@@ -99,23 +91,19 @@ public class RecordDataController {
         return ResponseEntity.noContent().build();
     }
 
-//    @PutMapping("/{id}/generate")
-//    public void updateFriendlyFieldName(@PathVariable Long id, @RequestBody OllamaRequest request) {
-//        String resp =  recordDataService.generateFriendlyColumnName(id,request);
-//        recordDataService.updateFriendlyColumnName(id,resp);
-//    }
-@PostMapping("/raw")
-public ResponseEntity<String> inputRawData(@RequestBody RequestDataDTO input) {
-    if (input.getSample_records() == null || input.getSample_records().isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sample records are empty");
+
+    @PostMapping("/raw")
+    public ResponseEntity<String> inputRawData(@RequestBody RequestDataDTO input) {
+        if (input.getSample_records() == null || input.getSample_records().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sample records are empty");
+        }
+        try {
+            requestDataService.saveInput(input);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Data stored successfully!");
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Database connection error");
+        }
     }
-    try {
-        requestDataService.saveInput(input);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Data stored successfully!");
-    } catch (DataAccessException e) {
-        throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Database connection error");
-    }
-}
 
 
     @PutMapping("/generate")
