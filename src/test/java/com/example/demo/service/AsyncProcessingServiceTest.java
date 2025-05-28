@@ -29,10 +29,10 @@ public class AsyncProcessingServiceTest {
     @Test
     void processDataAsyncShouldCallOllamaAndSaveToRecordAndVersionData() {
         RequestDataDTO dto = new RequestDataDTO();
-        dto.setRequest_id(1L);
+        dto.setRequestId(1L);
 
         SampleRecordDTO sample = new SampleRecordDTO();
-        sample.setTable_name("lars.dummy-booking");
+        sample.setTableName("lars.dummy-booking");
         sample.setDescription("dummy booking table on LARS");
 
         Map<String,String> mp = new HashMap<>();
@@ -40,20 +40,20 @@ public class AsyncProcessingServiceTest {
         mp.put("klnt-naam","Dominiak");
         sample.setData(Collections.singletonList(mp));
 
-        dto.setSample_records(Collections.singletonList(sample));
+        dto.setSampleRecords(Collections.singletonList(sample));
 
         Map<String,String> mockedResponse = new HashMap<>();
         mockedResponse.put("klnt-voorlv", "Customer Surname");
         mockedResponse.put("klnt-naam", "Customer Name");
 
-        Mockito.when(ollamaService.callToOllama(
+        Mockito.when(ollamaService.generateFriendlyColumnNameUsingGenAi(
                 Mockito.anyString(),
                 Mockito.anyString(),
                 Mockito.anyMap())).thenReturn(mockedResponse);
 
         asyncProcessingService.processDataAsync(dto);
 
-        Mockito.verify(ollamaService).callToOllama(
+        Mockito.verify(ollamaService).generateFriendlyColumnNameUsingGenAi(
                 Mockito.eq("lars.dummy-booking"),
                 Mockito.eq("dummy booking table on LARS"),
                 Mockito.anyMap());

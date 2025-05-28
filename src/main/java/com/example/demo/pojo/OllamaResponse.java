@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class OllamaResponse {
     @JsonProperty("model")
     private String model;
@@ -20,28 +20,4 @@ public class OllamaResponse {
 
     @JsonProperty("done")
     private boolean done;
-
-//    @JsonProperty("done_reason")
-//    private String doneReason;
-//
-//    @JsonProperty("context")
-//    private List<Integer> context;
-//
-//    @JsonProperty("load_duration")
-//    private long loadDuration;
-//
-//    @JsonProperty("prompt_eval_count")
-//    private int promptEvalCount;
-//
-//    @JsonProperty("prompt_eval_duration")
-//    private long promptEvalDuration;
-//
-//    @JsonProperty("eval_count")
-//    private int evalCount;
-//
-//    @JsonProperty("eval_duration")
-//    private long evalDuration;
-//
-//    @JsonProperty("total_duration")
-//    private long totalDuration;
 }

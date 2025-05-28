@@ -1,13 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.RecordDataDAO;
+import com.example.demo.dao.SampleDataDAO;
+import com.example.demo.dao.VersionDataDAO;
 import com.example.demo.pojo.RecordData;
 import com.example.demo.pojo.SampleData;
 import com.example.demo.pojo.VersionData;
-import com.example.demo.repository.RecordDataRepository;
-import com.example.demo.repository.SampleDataRepository;
-import com.example.demo.repository.VersionDataRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,18 +17,17 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Slf4j
 public class StoreAndFetchData {
 
-    private static final Logger logger = LoggerFactory.getLogger(StoreAndFetchData.class);
+    @Autowired
+    private RecordDataDAO recordDataDAO;
 
     @Autowired
-    private RecordDataRepository recordDataRepository;
+    private VersionDataDAO versionDataDAO;
 
     @Autowired
-    private VersionDataRepository versionDataRepository;
-
-    @Autowired
-    private SampleDataRepository sampleDataRepository;
+    private SampleDataDAO sampleDataDAO;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -40,7 +38,7 @@ public class StoreAndFetchData {
             String column = entry.getKey();
             String friendlyColumn = entry.getValue();
 
-            Optional<RecordData> existingRecord = recordDataRepository.findByTableNameAndColumnName(
+            Optional<RecordData> existingRecord = recordDataDAO.findByTableNameAndColumnName(
                     tableName,column);
 
             if(existingRecord.isPresent()) {
@@ -55,8 +53,8 @@ public class StoreAndFetchData {
                 prev.setVersionCount(version.getVersion());
                 prev.setFriendlyColumnName(friendlyColumn);
 
-                versionDataRepository.save(version);
-                recordDataRepository.save(prev);
+                versionDataDAO.save(version);
+                recordDataDAO.save(prev);
             }
             else {
                 RecordData recordData = new RecordData();
@@ -64,14 +62,14 @@ public class StoreAndFetchData {
                 recordData.setFriendlyColumnName(friendlyColumn);
                 recordData.setTableName(tableName);
 
-                recordDataRepository.save(recordData);
+                recordDataDAO.save(recordData);
             }
         }
     }
 
     public Map<String, List<String>> getPreviousSamples(String tableName) {
         LocalDateTime cutoff = LocalDateTime.now().minusHours(1);
-        List<SampleData> previousSamples = sampleDataRepository.findSamplesFromLastHour(tableName,cutoff);
+        List<SampleData> previousSamples = sampleDataDAO.findRecentSamples(tableName,cutoff);
 
         Map<String, List<String>> previousColumnValues = new HashMap<>();
 
@@ -94,8 +92,9 @@ public class StoreAndFetchData {
             msg.setText(message);
 
             mailSender.send(msg);
+            log.info("Email Sent");
         } catch (Exception e) {
-            logger.error("Failed to send email: {}", e.getMessage(), e);
+            log.error("Failed to send email: {}", e.getMessage(), e);
         }
     }
 

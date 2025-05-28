@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.RequestDataDAO;
+import com.example.demo.dao.SampleDataDAO;
 import com.example.demo.pojo.RequestDataDTO;
 import com.example.demo.pojo.SampleRecordDTO;
 import com.example.demo.repository.RequestDataRepository;
@@ -7,6 +9,7 @@ import com.example.demo.repository.SampleDataRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,10 +21,10 @@ import java.util.*;
 class RequestDataServiceTest {
 
     @Mock
-    private RequestDataRepository requestDataRepository;
+    private RequestDataDAO requestDataDAO;
 
     @Mock
-    private SampleDataRepository sampleDataRepository;
+    private SampleDataDAO sampleDataDAO;
 
     @Mock
     private AsyncProcessingService asyncProcessingService;
@@ -36,10 +39,10 @@ class RequestDataServiceTest {
     @BeforeEach
     void inputSetUp() {
         dto = new RequestDataDTO();
-        dto.setRequest_id(1L);
+        dto.setRequestId(1L);
 
         sample1 = new SampleRecordDTO();
-        sample1.setTable_name("lars.huisotaconfig");
+        sample1.setTableName("lars.huisotaconfig");
         sample1.setDescription("Housecode and ota mapping");
 
         Map<String, String> mp1 = new HashMap<>();
@@ -48,7 +51,7 @@ class RequestDataServiceTest {
         sample1.setData(Collections.singletonList(mp1));
 
         sample2 = new SampleRecordDTO();
-        sample2.setTable_name("lars.airp");
+        sample2.setTableName("lars.airp");
         sample2.setDescription("Airports");
 
         Map<String, String> mp2 = new HashMap<>();
@@ -60,16 +63,16 @@ class RequestDataServiceTest {
     @Test
     void saveInputShouldSaveInRequestDataAndSampleDataAndCallAsyncProcess() {
 
-        dto.setSample_records(Arrays.asList(sample1,sample2));
+        dto.setSampleRecords(Arrays.asList(sample1,sample2));
 
-        Mockito.when(sampleDataRepository.existsByTableNameAndColumnNameAndExampleData(
+        Mockito.when(sampleDataDAO.sampleExists(
                         Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(false);
 
         requestDataService.saveInput(dto);
 
-        Mockito.verify(requestDataRepository, Mockito.times(1)).saveAll(Mockito.anyList());
-        Mockito.verify(sampleDataRepository, Mockito.times(1)).saveAll(Mockito.anyList());
+        Mockito.verify(requestDataDAO, Mockito.times(1)).saveAll(Mockito.anyList());
+        Mockito.verify(sampleDataDAO, Mockito.times(1)).saveAll(Mockito.anyList());
 
         Mockito.verify(asyncProcessingService, Mockito.times(1)).processDataAsync(Mockito.eq(dto));
     }
@@ -78,21 +81,21 @@ class RequestDataServiceTest {
     void saveInputShouldDoNothingWhenInputIsNull() {
         requestDataService.saveInput(null);
 
-        Mockito.verifyNoInteractions(requestDataRepository);
-        Mockito.verifyNoInteractions(sampleDataRepository);
+        Mockito.verifyNoInteractions(requestDataDAO);
+        Mockito.verifyNoInteractions(sampleDataDAO);
         Mockito.verifyNoInteractions(asyncProcessingService);
     }
 
     @Test
     void saveInputShouldDoNothingWhenSampleRecordsIsEmpty() {
         RequestDataDTO dto = new RequestDataDTO();
-        dto.setRequest_id(1L);
-        dto.setSample_records(Collections.emptyList());
+        dto.setRequestId(1L);
+        dto.setSampleRecords(Collections.emptyList());
 
         requestDataService.saveInput(dto);
 
-        Mockito.verifyNoInteractions(requestDataRepository);
-        Mockito.verifyNoInteractions(sampleDataRepository);
+        Mockito.verifyNoInteractions(requestDataDAO);
+        Mockito.verifyNoInteractions(sampleDataDAO);
         Mockito.verifyNoInteractions(asyncProcessingService);
     }
 }

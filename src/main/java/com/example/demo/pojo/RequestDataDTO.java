@@ -1,15 +1,19 @@
 package com.example.demo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
 import java.util.Map;
 
-@Getter
-@Setter
+@Data
 @RequiredArgsConstructor
 public class RequestDataDTO {
-    private Long request_id;
-    private List<SampleRecordDTO> sample_records;
+
+    @JsonProperty("request_id")
+    private Long requestId;
+
+    @JsonProperty("sample_records")
+    private List<SampleRecordDTO> sampleRecords;
 }
 

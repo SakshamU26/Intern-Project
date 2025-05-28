@@ -1,9 +1,6 @@
 package com.example.demo.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,10 +8,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "request_data")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@RequiredArgsConstructor
 public class RequestData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

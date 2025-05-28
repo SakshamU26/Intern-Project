@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class OllamaRequest {
     @JsonProperty("model")
     private String model;
@@ -18,15 +19,4 @@ public class OllamaRequest {
     @JsonProperty("stream")
     private boolean stream = false;
 
-//    @JsonProperty("context")
-//    private List<Integer> context;
-//
-//    @JsonProperty("options")
-//    private Map<String, Object> options;
-//
-//    @JsonProperty("format")
-//    private String format;
-//
-//    @JsonProperty("raw")
-//    private boolean raw = false;
 }

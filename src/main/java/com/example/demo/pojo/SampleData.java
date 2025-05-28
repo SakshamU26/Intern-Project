@@ -1,18 +1,14 @@
 package com.example.demo.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sample_data")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@RequiredArgsConstructor
 public class SampleData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +24,7 @@ public class SampleData {
     private String columnName;
 
     @Column(name = "request_id")
-    private Long request_id;
+    private Long requestId;
 
     @Column(name = "description")
     private String description;

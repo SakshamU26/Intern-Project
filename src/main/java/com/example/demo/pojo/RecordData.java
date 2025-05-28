@@ -2,10 +2,7 @@ package com.example.demo.pojo;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,10 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "record_data")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@RequiredArgsConstructor
 public class RecordData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

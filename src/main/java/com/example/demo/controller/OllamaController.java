@@ -18,7 +18,7 @@ public class OllamaController {
     }
     @PostMapping("/api/generate")
     public ResponseEntity<OllamaResponse> generateSomething(@RequestBody OllamaRequest request) {
-        OllamaResponse response = ollamaService.communicateWithOllama(request);
+        OllamaResponse response = ollamaService.selectBestSuggestion(request);
         if (response == null) {
             return ResponseEntity.internalServerError().build();
         }

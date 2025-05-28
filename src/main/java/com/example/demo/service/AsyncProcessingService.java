@@ -25,11 +25,11 @@ public class AsyncProcessingService {
     @Async
     public void processDataAsync(RequestDataDTO requestData) {
         log.info("Thread executing processDataAsync(): {}", Thread.currentThread().getName());
-        Long requestId = requestData.getRequest_id();
-        List<SampleRecordDTO> sampleRecords = requestData.getSample_records();
+        Long requestId = requestData.getRequestId();
+        List<SampleRecordDTO> sampleRecords = requestData.getSampleRecords();
 
         for(SampleRecordDTO record : sampleRecords) {
-            String tableName = record.getTable_name();
+            String tableName = record.getTableName();
             String description = record.getDescription();
 
             Map<String, List<String>> columnValues = new HashMap<>();
@@ -40,7 +40,7 @@ public class AsyncProcessingService {
                             .add(entry.getValue());
                 }
             }
-            Map<String,String> columnsToFriendlyColumns = ollamaService.callToOllama(tableName, description, columnValues);
+            Map<String,String> columnsToFriendlyColumns = ollamaService.generateFriendlyColumnNameUsingGenAi(tableName, description, columnValues);
             storeAndFetchData.saveToRecordDataAndVersionData(columnsToFriendlyColumns, tableName);
         }
         storeAndFetchData.sendEmail(requestId);

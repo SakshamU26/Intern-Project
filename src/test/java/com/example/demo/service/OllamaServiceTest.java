@@ -53,7 +53,7 @@ public class OllamaServiceTest {
         when(objectMapper.readValue(responseJson, OllamaResponse.class))
                 .thenReturn(expectedResponse);
 
-        OllamaResponse actualResponse = ollamaService.selectBestSuggestionWithOllama(request);
+        OllamaResponse actualResponse = ollamaService.selectBestSuggestion(request);
 
         assertEquals("best suggestion", actualResponse.getResponse());
         verify(restTemplate).exchange(eq(API_URL), eq(HttpMethod.POST), any(HttpEntity.class), eq(String.class));
@@ -86,7 +86,7 @@ public class OllamaServiceTest {
 
         when(objectMapper.readValue(rawJson, OllamaResponse.class)).thenReturn(mockResponse);
 
-        Map<String, String> result = ollamaService.callToOllama(tableName, description, columnValues);
+        Map<String, String> result = ollamaService.generateFriendlyColumnNameUsingGenAi(tableName, description, columnValues);
 
         assertEquals(expected, result);
     }
